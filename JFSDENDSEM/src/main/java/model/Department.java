@@ -1,31 +1,35 @@
-package model;
+package com.klef.jfsd.exam.hql;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "department")
 public class Department {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int deptId;
+    private int id;
 
-    @Column(nullable = false)
+    @Column(name = "name")
     private String name;
 
-    @Column(nullable = false)
+    @Column(name = "location")
     private String location;
 
-    @Column(name = "hod_name", nullable = false)
+    @Column(name = "hod_name")
     private String hodName;
 
-    // Getters and setters
-    public int getDeptId() {
-        return deptId;
+    // Getters and Setters
+    public int getId() {
+        return id;
     }
 
-    public void setDeptId(int deptId) {
-        this.deptId = deptId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -50,5 +54,10 @@ public class Department {
 
     public void setHodName(String hodName) {
         this.hodName = hodName;
+    }
+
+    @Override
+    public String toString() {
+        return "Department [id=" + id + ", name=" + name + ", location=" + location + ", hodName=" + hodName + "]";
     }
 }
