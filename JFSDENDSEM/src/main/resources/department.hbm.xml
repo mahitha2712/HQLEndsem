@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+  <class name="model.Department" table="department">
+    <id name="deptId" column="deptId">
+      <generator class="increment"/>
+    </id>
+    <property name="name" column="name"/>
+    <property name="location" column="location"/>
+    <property name="hodName" column="hod_name"/>
+  </class>
+
+</hibernate-mapping>
