@@ -1,48 +1,43 @@
 package model;
 
+
+
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.hibernate.cfg.Configuration;
-import jakarta.persistence.Query;
 
-public class DepartmentManager {
+public class Controller {
+    public static void main(String[] args) {
+       
+        Session session = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
 
-    // Singleton SessionFactory for performance improvement
-    private static SessionFactory sessionFactory = new Configuration()
-            .configure("hibernate.cfg.xml")
-            .addAnnotatedClass(Department.class)
-            .buildSessionFactory();
+        try {
+            
+            String hql = "UPDATE Department SET name = ?1, location = ?2 WHERE id = ?3";
 
-    // Method to update department details
-    public String updateDepartment(int deptId, String newName, String newLocation) throws Exception {
-        // Open a session
-        Session session = sessionFactory.openSession();
+            
+            Query query = session.createQuery(hql);
 
-        // Begin transaction
-        session.beginTransaction();
+           
+            query.setParameter(1, "Updated Department Name");
+            query.setParameter(2, "Updated Location");
+            query.setParameter(3, 1); // Update Department with ID 1
 
-        // HQL query to update department details
-        String hql = "UPDATE Department d SET d.name = :name, d.location = :location WHERE d.deptId = :deptId";
-        Query query = session.createQuery(hql);
-        query.setParameter("name", newName);
-        query.setParameter("location", newLocation);
-        query.setParameter("deptId", deptId);
+            
+            int result = query.executeUpdate();
+            System.out.println("Rows affected: " + result);
 
-        // Execute the update query
-        int rowsAffected = query.executeUpdate();
-
-        // Commit transaction
-        session.getTransaction().commit();
-
-        // Close session
-        session.close();
-
-        // Return the result
-        return rowsAffected > 0 ? "Update successful" : "No records updated";
-    }
-
-    // Static method to close SessionFactory when application is shutting down
-    public static void shutdown() {
-        sessionFactory.close();
+            
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
     }
 }
+
